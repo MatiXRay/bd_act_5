@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Acceso Oscuro</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        background: linear-gradient(
+          135deg,
+          #0f0f23 0%,
+          #1a1a2e 50%,
+          #16213e 100%
+        );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        position: relative;
+      }
+
+      /* Efectos de fondo animados */
+      body::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(120, 119, 198, 0.3) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 119, 198, 0.15) 0%,
+            transparent 50%
+          );
+        animation: pulse 4s ease-in-out infinite alternate;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .login-container {
+        background: rgba(22, 27, 34, 0.85);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 3rem;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        position: relative;
+        z-index: 10;
+        animation: slideUp 0.8s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-header {
+        text-align: center;
+        margin-bottom: 2.5rem;
+      }
+
+      .login-title {
+        color: #ffffff;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #ffffff 0%, #a8a8b3 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+
+      .login-subtitle {
+        color: #8892b0;
+        font-size: 0.95rem;
+        font-weight: 400;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+        position: relative;
+      }
+
+      .form-label {
+        display: block;
+        color: #ccd6f6;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        opacity: 0.9;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 1rem 1.25rem;
+        background: rgba(30, 41, 59, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: #64ffda;
+        background: rgba(30, 41, 59, 0.8);
+        box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.1),
+          0 0 20px rgba(100, 255, 218, 0.2);
+        transform: translateY(-1px);
+      }
+
+      .form-input::placeholder {
+        color: #64748b;
+        font-weight: 400;
+      }
+
+      .login-button {
+        width: 100%;
+        padding: 1rem 2rem;
+        background: linear-gradient(135deg, #64ffda 0%, #00d4aa 100%);
+        border: none;
+        border-radius: 12px;
+        color: #0f0f23;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        margin-top: 1rem;
+      }
+
+      .login-button:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.3),
+          transparent
+        );
+        transition: all 0.6s ease;
+      }
+
+      .login-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(100, 255, 218, 0.4);
+      }
+
+      .login-button:hover:before {
+        left: 100%;
+      }
+
+      .login-button:active {
+        transform: translateY(0);
+      }
+
+      .forgot-password {
+        text-align: center;
+        margin-top: 1.5rem;
+      }
+
+      .forgot-password a {
+        color: #64ffda;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .forgot-password a:hover {
+        color: #ffffff;
+        text-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+      }
+
+      /* Efectos de partículas flotantes */
+      .floating-particles {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 1;
+      }
+
+      .particle {
+        position: absolute;
+        background: rgba(100, 255, 218, 0.1);
+        border-radius: 50%;
+        animation: float 20s infinite linear;
+      }
+
+      @keyframes float {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 480px) {
+        .login-container {
+          margin: 1rem;
+          padding: 2rem;
+        }
+
+        .login-title {
+          font-size: 1.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="floating-particles" id="particles"></div>
+
+    <div class="login-container">
+      <div class="login-header">
+        <h1 class="login-title">Bienvenido</h1>
+      </div>
+
+      <form class="login-form">
+        <div class="form-group">
+          <label class="form-label" for="username">Usuario</label>
+          <input
+            type="text"
+            id="username"
+            class="form-input"
+            placeholder="Ingresa tu nombre de usuario"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="password">Contraseña</label>
+          <input
+            type="password"
+            id="password"
+            class="form-input"
+            placeholder="Ingresa tu contraseña"
+            required
+          />
+        </div>
+
+        <button type="submit" class="login-button">Iniciar Sesión</button>
+
+        <div class="forgot-password">
+          <a href="#" onclick="alert('Fuiste xD!'); return false;"
+            >¿Olvidaste tu contraseña?</a
+          >
+        </div>
+      </form>
+    </div>
+
+    <script>
+      // Crear partículas flotantes
+      function createParticles() {
+        const particlesContainer = document.getElementById("particles");
+
+        for (let i = 0; i < 15; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+
+          const size = Math.random() * 4 + 2;
+          const startPosition = Math.random() * 100;
+          const animationDelay = Math.random() * 20;
+
+          particle.style.width = size + "px";
+          particle.style.height = size + "px";
+          particle.style.left = startPosition + "%";
+          particle.style.animationDelay = animationDelay + "s";
+
+          particlesContainer.appendChild(particle);
+        }
+      }
+
+      // Manejar el envío del formulario
+      document
+        .querySelector(".login-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          if (username && password) {
+            const button = document.querySelector(".login-button");
+            button.textContent = "Accediendo...";
+            button.disabled = true;
+
+            try {
+              const response = await fetch("http://localhost:3000/login", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  nombre: username,
+                  contrasenia: password,
+                }),
+              });
+
+              const data = await response.json();
+
+              if (response.ok) {
+                localStorage.setItem("usuarioNombre", data.usuario.nombre);
+                window.location.href = "home.html";
+              } else {
+                alert(data.mensaje);
+              }
+            } catch (error) {
+              alert("Error al conectar con el servidor");
+              console.error(error);
+            } finally {
+              button.textContent = "Iniciar Sesión";
+              button.disabled = false;
+            }
+          }
+        });
+      // Efectos de enfoque en inputs
+      const inputs = document.querySelectorAll(".form-input");
+      inputs.forEach((input) => {
+        input.addEventListener("focus", function () {
+          this.parentElement.style.transform = "scale(1.02)";
+        });
+
+        input.addEventListener("blur", function () {
+          this.parentElement.style.transform = "scale(1)";
+        });
+      });
+
+      // Inicializar partículas
+      createParticles();
+    </script>
+  </body>
+</html>
