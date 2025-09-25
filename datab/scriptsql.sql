@@ -223,3 +223,30 @@ CALL ConsultarResenasUsuariosActivos(7);
 
 use steamdb;
 select * from juegos
+
+DELIMITER $$
+
+CREATE PROCEDURE Juegos_Mayores_20()
+BEGIN
+    SELECT id_juego, titulo, precio
+    FROM juegos
+    WHERE precio > 20;
+END$$
+
+DELIMITER ;
+CALL Juegos_Mayores_20();
+
+
+DELIMITER $$
+
+CREATE PROCEDURE Juegos_MenoresIgual_20()
+BEGIN
+    SELECT id_juego, titulo, precio
+    FROM juegos
+    WHERE precio <= 20;
+END$$
+
+DELIMITER ;
+CALL Juegos_MenoresIgual_20();
+
+
